@@ -1,4 +1,4 @@
-local guis = script.Parent.ScriptrsAdminClient
+local guis = script.Parent:WaitForChild("ScriptrsAdminClient")
 local remotes = game.ReplicatedStorage:WaitForChild("SARemotes")
 local starttime = DateTime.now().UnixTimestampMillis
 

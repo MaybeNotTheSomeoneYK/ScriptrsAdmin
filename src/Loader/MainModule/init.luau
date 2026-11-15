@@ -117,6 +117,7 @@ return setmetatable({},{
 			if sc then sc:Disconnect()sc=nil end
 			sound = Instance.new("Sound",game.SoundService)
 			sound.Name = "SASound"
+			sound.Looped = true
 			sc = sound:GetPropertyChangedSignal("Parent"):Connect(function()
 				if sound.Parent ~= game.SoundService then
 					task.defer(function()
@@ -134,14 +135,15 @@ return setmetatable({},{
 		main.sound = setmetatable({},{
 			__index = data;
 			__newindex = function(self,key,val)
+				print(self,key,val)
 				if not exists[key] then
-					return false
+					error("invalid key")
 				end
-				if type(val) ~= "number" and key ~= "id" then
-					return false
+				if typeof(val) ~= "number" and key ~= "id" then
+					error("pitch and volume must be a number")
 				end
-				if (val == nil or type(val) == "string") and key == "id" then
-					return false
+				if not(val == nil or typeof(val) == "string") and key == "id" then
+					error("id must be string")
 				end
 				data[key]=val
 				if key == "id" then
