@@ -132,7 +132,7 @@ return {
 				api.sound.id = nil
 				return
 			end
-			local _,asset = pcall(function()return game.MarketplaceService:GetProductInfoAsync(args[2])end)
+			local _,asset = pcall(function()return game.MarketplaceService:GetProductInfoAsync(args[1])end)
 			if asset and asset.AssetTypeId == 3 then
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} played "{asset.Name}"`)
 				api.sound.id = `rbxassetid://{args[1]}`
