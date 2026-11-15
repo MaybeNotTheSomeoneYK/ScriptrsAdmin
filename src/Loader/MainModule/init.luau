@@ -101,10 +101,70 @@ return setmetatable({},{
 			end
 		end
 		
+		local data = {
+			id = nil;
+			pitch = 1;
+			volume = 1;
+		}
+		local exists = {
+			id = true;
+			pitch = true;
+			volume = true;
+		}
+		local sound
+		local sc
+		local function initsound()
+			if sc then sc:Disconnect()sc=nil end
+			sound = Instance.new("Sound",game.SoundService)
+			sound.Name = "SASound"
+			sc = sound:GetPropertyChangedSignal("Parent"):Connect(function()
+				if sound.Parent ~= game.SoundService then
+					task.defer(function()
+						local s = pcall(function()
+							sound.Parent = game.SoundService
+						end)
+						if not s then
+							initsound()
+						end
+					end)
+				end
+			end)
+		end
+		initsound()
+		main.sound = setmetatable({},{
+			__index = data;
+			__newindex = function(self,key,val)
+				if not exists[key] then
+					return false
+				end
+				if type(val) ~= "number" and key ~= "id" then
+					return false
+				end
+				if (val == nil or type(val) == "string") and key == "id" then
+					return false
+				end
+				data[key]=val
+				if key == "id" then
+					sound.SoundId = if val then val else ""
+					if val==nil then
+						sound:Stop()
+					else
+						sound:Play()
+					end
+				elseif key == "pitch" then
+					sound.PlaybackSpeed = val
+				elseif key == "volume" then
+					sound.Volume = val
+				end
+			end
+		})
 		main.settings = finalsettings
 		main.serveradmins = {}
 		main.commands = require(main.server.SAModules.BuiltinCommands)
 		main.server.SAModules.BuiltinCommands.Parent = nil
+		main.logs = {
+			commands = {};
+		}
 		local cc = loaderfolder:FindFirstChild("Commands")
 		if not cc then 
 			cc={} 

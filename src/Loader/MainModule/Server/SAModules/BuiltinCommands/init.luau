@@ -119,6 +119,62 @@ return {
 			args[1]:Kick(args[2])
 		end,
 	};
+	music = {
+		RankLock = false;
+		ExcludeCreator = false;
+		NoStudio = false;
+		Rank = 2;
+		Args = {"Number"};
+		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
+			if undo then
+				if not api.sound.id then return false, "No music is playing right now, maybe the sound you're hearing is in your client side or its handled by other scripts" end
+				api.shared.SARemotes.HintClient:FireAllClients(`{exec} stopped the current music`)
+				api.sound.id = nil
+				return
+			end
+			local _,asset = pcall(function()return game.MarketplaceService:GetProductInfoAsync(args[2])end)
+			if asset and asset.AssetTypeId == 3 then
+				api.shared.SARemotes.HintClient:FireAllClients(`{exec} played "{asset.Name}"`)
+				api.sound.id = `rbxassetid://{args[1]}`
+			else
+				return false, "The provided ID is whether NOT a valid Sound or a privated asset"
+			end
+		end,
+	};
+	pitch = {
+		RankLock = false;
+		ExcludeCreator = false;
+		NoStudio = false;
+		Rank = 2;
+		Args = {"Number"};
+		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
+			if not api.sound.id then return false, "No music is playing right now, maybe the sound you're hearing is in your client side or its handled by other scripts" end
+			if undo then
+				api.shared.SARemotes.HintClient:FireAllClients(`{exec} resets the current music's {self.Name}`)
+				api.sound[self.Name] = 1
+			else
+				api.shared.SARemotes.HintClient:FireAllClients(`{exec} changed the current music's {self.Name} to {args[1]}`)
+				api.sound[self.Name] = 1
+			end
+		end,
+	};
+	volume = {
+		RankLock = false;
+		ExcludeCreator = false;
+		NoStudio = false;
+		Rank = 2;
+		Args = {"Number"};
+		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
+			if not api.sound.id then return false, "No music is playing right now, maybe the sound you're hearing is in your client side or its handled by other scripts" end
+			if undo then
+				api.shared.SARemotes.HintClient:FireAllClients(`{exec} resets the current music's {self.Name}`)
+				api.sound[self.Name] = 1
+			else
+				api.shared.SARemotes.HintClient:FireAllClients(`{exec} changed the current music's {self.Name} to {args[1]}`)
+				api.sound[self.Name] = 1
+			end
+		end,
+	};
 	freeze = {
 		RankLock = false;
 		ExcludeCreator = false;
