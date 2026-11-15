@@ -151,10 +151,10 @@ return {
 			if not api.sound.id then return false, "No music is playing right now, maybe the sound you're hearing is in your client side or its handled by other scripts" end
 			if undo then
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} resets the current music's {self.Name}`)
-				api.sound[self.Name] = 1
+				api.sound[self.Name] = args[1]
 			else
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} changed the current music's {self.Name} to {args[1]}`)
-				api.sound[self.Name] = 1
+				api.sound[self.Name] = args[1]
 			end
 		end,
 	};
@@ -168,10 +168,10 @@ return {
 			if not api.sound.id then return false, "No music is playing right now, maybe the sound you're hearing is in your client side or its handled by other scripts" end
 			if undo then
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} resets the current music's {self.Name}`)
-				api.sound[self.Name] = 1
+				api.sound[self.Name] = args[1]
 			else
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} changed the current music's {self.Name} to {args[1]}`)
-				api.sound[self.Name] = 1
+				api.sound[self.Name] = args[1]
 			end
 		end,
 	};

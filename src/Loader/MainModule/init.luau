@@ -135,7 +135,6 @@ return setmetatable({},{
 		main.sound = setmetatable({},{
 			__index = data;
 			__newindex = function(self,key,val)
-				print(self,key,val)
 				if not exists[key] then
 					error("invalid key")
 				end
@@ -157,6 +156,8 @@ return setmetatable({},{
 					sound.PlaybackSpeed = val
 				elseif key == "volume" then
 					sound.Volume = val
+				else
+					warn("what")
 				end
 			end
 		})
