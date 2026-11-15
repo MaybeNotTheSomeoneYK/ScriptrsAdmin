@@ -95,7 +95,7 @@ for _,v in commands do
 				local s,success,result = pcall(v.Func,v,splitted[1]:sub(2,3)=="un",game.Players:GetPlayerByUserId(p.UserId),clonedargs)
 				if s==true then
 					api.logs.commands[DateTime.now().UnixTimestampMillis]={p,v.Name}
-					game.TestService:Message(`{p} ran {api.settings.prefix}{v.Name}`,script)
+					game.TestService:Message(`{p} ran {api.settings.Prefix}{v.Name}`,script)
 				end
 				if success==true then
 					api.shared.SARemotes.NotifyClient:FireClient(game.Players:GetPlayerByUserId(p.UserId),
@@ -146,7 +146,7 @@ for _,v in commands do
 			local s,success,result = pcall(v.Func,v,splitted[1]:sub(2,3)=="un",game.Players:GetPlayerByUserId(p.UserId),args)
 			if s==true then
 				api.logs.commands[DateTime.now().UnixTimestampMillis]={p,v.Name}
-				game.TestService:Message(`{p} ran {api.settings.prefix}{v.Name}`,script)
+				game.TestService:Message(`{p} ran {api.settings.Prefix}{v.Name}`,script)
 			end
 			if success==true then
 				return api.shared.SARemotes.NotifyClient:FireClient(game.Players:GetPlayerByUserId(p.UserId),
