@@ -22,16 +22,20 @@ local actions = {
 		notice.NotificationTitle.Text = corename.." / "..states[success][1]
 		notice.NotificationText.Text = message
 		notice.NotificationImage.Image = states[success][2]
+		notice.Parent = guis.NotificationFrame
+		notice.AnchorPoint = Vector2.new(1,1)
+		local move = notice.AbsoluteSize.Y+5
+		notice.AnchorPoint = Vector2.new(0,1)
 		local tweens = {}
 		for _,i in guis.NotificationFrame:GetChildren() do
-			table.insert(tweens,game.TweenService:Create(i,TweenInfo.new(.7),{Position = UDim2.new(i.Position.X.Scale,0,i.Position.Y.Scale,i.Position.Y.Offset-notice.AbsoluteSize.Y-5)}))
+			if i==notice then continue end
+			table.insert(tweens,game.TweenService:Create(i,TweenInfo.new(.7),{Position = UDim2.new(i.Position.X.Scale,0,i.Position.Y.Scale,i.Position.Y.Offset-move)}))
 		end
 		table.insert(tweens,game.TweenService:Create(notice,TweenInfo.new(.7),{AnchorPoint = Vector2.new(1,1)}))
-		notice.Parent = guis.NotificationFrame
 		for _,i in tweens do
 			i:Play()
 		end
-		task.delay(5,function()
+		task.delay(90,function()
 			game.TweenService:Create(notice,TweenInfo.new(.7),{AnchorPoint = Vector2.new(0,1)}):Play()
 			game.Debris:AddItem(notice,.7)
 		end)
