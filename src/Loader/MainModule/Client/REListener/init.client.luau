@@ -24,7 +24,7 @@ local actions = {
 		notice.NotificationImage.Image = states[success][2]
 		local tweens = {}
 		for _,i in guis.NotificationFrame:GetChildren() do
-			table.insert(tweens,game.TweenService:Create(i,TweenInfo.new(.7),{Position = UDim2.new(i.Position.X.Scale,0,i.Position.Y.Scale,i.Position.Y.Offset-i.AbsoluteSize.Y-5)}))
+			table.insert(tweens,game.TweenService:Create(i,TweenInfo.new(.7),{Position = UDim2.new(i.Position.X.Scale,0,i.Position.Y.Scale,i.Position.Y.Offset-notice.AbsoluteSize.Y-5)}))
 		end
 		table.insert(tweens,game.TweenService:Create(notice,TweenInfo.new(.7),{AnchorPoint = Vector2.new(1,1)}))
 		notice.Parent = guis.NotificationFrame

@@ -62,6 +62,7 @@ return {
 		Args = {"Text"};
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
 			api.shared.SARemotes.AnnounceClient:FireAllClients(`{exec.DisplayName} (@{exec.Name})\n[ {api.serveradmins[exec.UserId]} / {require(api.server.SAModules.GetRankInfo)(api.serveradmins[exec.UserId])[2]} ]\n\n{args[1]}`)
+			return true,"Announced"
 		end,
 	};
 	h = {
@@ -72,6 +73,7 @@ return {
 		Args = {"Text"};
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
 			api.shared.SARemotes.HintClient:FireAllClients(`{exec.DisplayName} (@{exec.Name}): {args[1]}`)
+			return true,"Announced"
 		end,
 	};
 	heal = {
@@ -84,6 +86,7 @@ return {
 			if not args[1].Character:IsDescendantOf(game) then return false, "Target's Character isnt visible to server, are they using fakechar?, or are they stuck in a limbo of loading character?" end
 			if not args[1].Character:FindFirstChildOfClass("Humanoid") then return false, "Interesting... the target doesnt have humanoid" end
 			args[1].Character:FindFirstChildOfClass("Humanoid").Health+=args[2]
+			return true,"Healed"
 		end,
 	};
 	re = {
@@ -97,6 +100,7 @@ return {
 			if args[1].Character:IsDescendantOf(game) then pivot=args[1].Character:GetPivot()end
 			args[1]:LoadCharacterAsync()
 			if pivot then args[1].Character:PivotTo(pivot) end
+			return true,"Resetted"
 		end,
 	};
 	mute = {
@@ -107,6 +111,7 @@ return {
 		Args = {"Player"};
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
 			api.server.EditClientInsProp:FireClient(args[1],"TextChatService.ChatInputBarConfiguration","Enabled",undo)
+			return true,"Muted"
 		end,
 	};
 	kick = {
@@ -117,6 +122,7 @@ return {
 		Args = {"Player","Text"};
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
 			args[1]:Kick(args[2])
+			return true,"Kicked"
 		end,
 	};
 	music = {
@@ -130,12 +136,13 @@ return {
 				if not api.sound.id then return false, "No music is playing right now, maybe the sound you're hearing is in your client side or its handled by other scripts" end
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} stopped the current music`)
 				api.sound.id = nil
-				return
+				return true, "Resetted current music"
 			end
 			local _,asset = pcall(function()return game.MarketplaceService:GetProductInfoAsync(args[1])end)
 			if asset and asset.AssetTypeId == 3 then
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} played "{asset.Name}"`)
 				api.sound.id = `rbxassetid://{args[1]}`
+				return true, "Played a new music"
 			else
 				return false, "The provided ID is whether NOT a valid Sound or a privated asset"
 			end
@@ -152,9 +159,11 @@ return {
 			if undo then
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} resets the current music's {self.Name}`)
 				api.sound[self.Name] = args[1]
+				return true,`Changed current music's {self.Name}`
 			else
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} changed the current music's {self.Name} to {args[1]}`)
-				api.sound[self.Name] = args[1]
+				api.sound[self.Name] = 1
+				return true,`Changed current music's {self.Name}`
 			end
 		end,
 	};
@@ -169,9 +178,11 @@ return {
 			if undo then
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} resets the current music's {self.Name}`)
 				api.sound[self.Name] = args[1]
+				return true,`Changed current music's {self.Name}`
 			else
 				api.shared.SARemotes.HintClient:FireAllClients(`{exec} changed the current music's {self.Name} to {args[1]}`)
-				api.sound[self.Name] = args[1]
+				api.sound[self.Name] = 1
+				return true,`Changed current music's {self.Name}`
 			end
 		end,
 	};
@@ -184,6 +195,7 @@ return {
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
 			if not args[1].Character:IsDescendantOf(game) then return false, "Target's Character isnt visible to server, are they using fakechar?, or are they stuck in a limbo of loading character?" end
 			args[1].Character:WaitForChild("HumanoidRootPart").Anchored = not undo
+			return true,`Freezed`
 		end,
 	};
 	bring = {
@@ -217,7 +229,7 @@ return {
 		Rank = 3;
 		Args = {"UserId","Reason","Seconds"};
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
-			if not ({pcall(function()game.Players:GetNameFromUserIdAsync(args[1])end)})[1] then return false, "Invalid UserId" end
+			if not ({pcall(function()return game.Players:GetNameFromUserIdAsync(args[1])end)})[1] then return false, "Invalid UserId" end
 			if not undo then
 				game.Players:BanAsync({
 					UserIds = {args[1]};
@@ -226,8 +238,10 @@ return {
 					PrivateReason = "Banned by "..exec.Name;
 					ApplyToUniverse = true
 				})
+				return true, "Banned"
 			else
 				game.Players:UnbanAsync({UserIds={args[1]},ApplyToUniverse=true})
+				return true, "Unbanned"
 			end
 		end,
 	};
@@ -245,6 +259,7 @@ return {
 					tool:FindFirstChildOfClass("Tool").Parent = args[1].Backpack
 				end
 				tool:Destroy()
+				return true,`Given {args[1].Name or exec.Name} the "{gear.Name}"`
 			else
 				return false, "The provided ID is whether NOT a valid gear or a privated asset"
 			end
@@ -259,6 +274,7 @@ return {
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
 			local tool = script:WaitForChild("Building Tools"):Clone()
 			tool.Parent = args[1].Backpack
+			return true, `Given {args[1].Name or exec.Name} BuildingTools`
 		end,
 	};
 	serverlock = {
@@ -275,11 +291,13 @@ return {
 						a:Kick("This server is locked for all new joiners")
 					end
 				end)
+				return true,`Locked`
 			else
 				if con[self.Name] then
 					con[self.Name]:Disconnect()
 					con[self.Name] = nil
 				end
+				return true,`Unlocked`
 			end
 		end,
 	};
@@ -291,7 +309,7 @@ return {
 		Args = {"Player"};
 		Func = function(self:{any}, undo: boolean, exec: Player, args: {any})
 			if not args[1].Character:IsDescendantOf(game) then return false, "Target's Character isnt visible to server, are they using fakechar?, or are they stuck in a limbo of loading character?" end
-			if undo then
+			if not undo then
 				api.server.EditClientInsProp:FireClient(exec,"Workspace.Camera","CameraSubject",args[1].Character)
 			else
 				api.server.EditClientInsProp:FireClient(exec,"Workspace.Camera","CameraSubject",exec.Character)

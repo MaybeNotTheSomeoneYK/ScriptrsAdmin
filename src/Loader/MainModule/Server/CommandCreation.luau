@@ -78,6 +78,7 @@ for _,v in commands do
 								"RankLock is enabled on this command, unable to run this command on someone whoes rank is higher or equal to yours"
 							)
 						end
+						continue
 					end
 				end
 				if v.ExcludeCreator then
@@ -90,6 +91,7 @@ for _,v in commands do
 								"ExcludeCreator is enabled on this command, unable to run this command on the game owner"
 							)
 						end
+						continue
 					end
 				end
 				local s,success,result = pcall(v.Func,v,splitted[1]:sub(2,3)=="un",game.Players:GetPlayerByUserId(p.UserId),clonedargs)

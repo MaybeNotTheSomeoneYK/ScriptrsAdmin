@@ -1,7 +1,7 @@
 local q=require("@self/Icon").new()
 q:align("Center")
 q:setName(game.HttpService:GenerateGUID(false))
-q:setLabel("<font weight=\"Regular\">This game used</font> <i><b>✨Scriptr's Admin ✨</b></i> (v5.1)")
+q:setLabel("<font weight=\"Regular\">This game used</font> <i><b>✨Scriptr's Admin ✨</b></i> (v5.2)")
 q:setImage("rbxassetid://116979240076692")
 local prefix = (function()
 	return game.TextChatService:WaitForChild("SAChatCommands"):FindFirstChildOfClass("TextChatCommand").PrimaryAlias:sub(1,1)
